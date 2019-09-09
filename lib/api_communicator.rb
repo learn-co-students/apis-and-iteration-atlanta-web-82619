@@ -16,10 +16,15 @@ def get_character_movies_from_api(character_name)
   # this collection will be the argument given to `print_movies`
   #  and that method will do some nice presentation stuff like puts out a list
   #  of movies by title. Have a play around with the puts with other info about a given film.
+  character_name = character_name.split.map {|c| c.capitalize}.join(" ")
+  film_urls = response_hash["results"].select {|result| result["name"] == character_name}.map {|c| c["films"]}.flatten
+  film_info = film_urls.map {|url| JSON.parse(RestClient.get(url))}
+  # binding.pry
 end
 
 def print_movies(films)
   # some iteration magic and puts out the movies in a nice list
+  films.each {|film| p "#{film["title"]}"}
 end
 
 def show_character_movies(character)
@@ -31,3 +36,5 @@ end
 
 # that `get_character_movies_from_api` method is probably pretty long. Does it do more than one job?
 # can you split it up into helper methods?
+# get_character_movies_from_api("Luke Skywalker")
+# show_character_movies("Luke Skywalker")
